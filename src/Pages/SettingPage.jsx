@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { logoutUser, getCurrentUser, updateProfile } from "../Service/api";
 
 const MAX_DISPLAY_NAME_CHARS = 20;
@@ -12,11 +12,11 @@ export default function SettingsPage() {
 
   const [user, setUser] = useState({
     id: null,
-    fullName: "Alex Morgan",
-    name: "Alex Morgan",
+    fullName: "-",
+    name: " NewOne",
     email: "guest@gmail.com",
-    avatar: "/uploads/defaul.jpeg",
-    username: "alexmorgan",
+    avatar: "/uploads/Ikram.png",
+    username: "update kol d dlta",
     bio: "Coffee enthusiast ☕ | Tech lover 💻",
     status: "Available",
     ...passedUser,
@@ -69,11 +69,12 @@ export default function SettingsPage() {
   }, [passedUser]);
 
   const handleSaveDisplayName = async () => {
-    if (!user.id || displayName.trim() === "" || displayName === user.fullName) return;
+    if (!user.id || displayName.trim() === "" || displayName === user.fullName)
+      return;
     setSavingDisplayName(true);
     try {
       const res = await updateProfile({ fullName: displayName });
-      setUser(prev => ({ ...prev, fullName: res.user.fullName }));
+      setUser((prev) => ({ ...prev, fullName: res.user.fullName }));
       setEditingDisplayName(false);
       alert(res?.message || "Display Name updated!");
     } catch (err) {
@@ -85,11 +86,12 @@ export default function SettingsPage() {
   };
 
   const handleSaveUsername = async () => {
-    if (!user.id || username.trim() === "" || username === user.username) return;
+    if (!user.id || username.trim() === "" || username === user.username)
+      return;
     setSavingUsername(true);
     try {
       const res = await updateProfile({ username });
-      setUser(prev => ({ ...prev, username: res.user.username }));
+      setUser((prev) => ({ ...prev, username: res.user.username }));
       alert(res?.message || "Username updated!");
     } catch (err) {
       console.error(err);
@@ -149,21 +151,34 @@ export default function SettingsPage() {
     }
   };
 
-  if (loadingUser) return <div className="d-flex justify-content-center align-items-center vh-100">Loading user...</div>;
+  if (loadingUser)
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        Loading user...
+      </div>
+    );
 
   return (
     <div className="d-flex justify-content-center align-items-start py-5 bg-light min-vh-100">
-      <div className="card shadow-sm rounded-4 p-0 overflow-hidden" style={{ width: "620px" }}>
-        
+      <div
+        className="card shadow-sm rounded-4 p-0 overflow-hidden"
+        style={{ width: "620px" }}
+      >
         {/* Sleek Top Tabs */}
         <div className="d-flex justify-content-between bg-white px-4 pt-3 border-bottom">
           {["profile", "premium", "account"].map((tab) => (
             <button
               key={tab}
               className={`flex-fill text-center py-2 fw-semibold border-0 ${
-                activeTab === tab ? "border-bottom border-3 border-primary text-primary" : "text-secondary"
+                activeTab === tab
+                  ? "border-bottom border-3 border-primary text-primary"
+                  : "text-secondary"
               }`}
-              style={{ background: "transparent", transition: "0.3s", fontSize: "0.95rem" }}
+              style={{
+                background: "transparent",
+                transition: "0.3s",
+                fontSize: "0.95rem",
+              }}
               onClick={() => setActiveTab(tab)}
             >
               {tab === "profile" && "Profile"}
@@ -179,13 +194,27 @@ export default function SettingsPage() {
             <div>
               {/* Profile Photo */}
               <div className="d-flex align-items-center mb-4">
-                <img src={user.avatar} alt="Profile" className="rounded-circle border me-4" style={{ width: 90, height: 90, objectFit: "cover" }} />
+                <img
+                  src={user.avatar}
+                  alt="Profile"
+                  className="rounded-circle border me-4"
+                  style={{ width: 90, height: 90, objectFit: "cover" }}
+                />
                 <div>
                   <h6 className="fw-bold mb-1">Profile Photo</h6>
-                  <p className="text-muted small mb-2">Update your profile picture. Recommended: 400x400px</p>
+                  <p className="text-muted small mb-2">
+                    Update your profile picture. Recommended: 400x400px
+                  </p>
                   <div className="d-flex">
-                    <button className="btn btn-primary btn-sm me-2">Upload Photo</button>
-                    <button className="btn btn-outline-secondary btn-sm">Remove</button>
+                    <Link to="/profile">
+                      {" "}
+                      <button className="btn btn-primary btn-sm me-2">
+                        Upload Photo
+                      </button>
+                    </Link>
+                    <button className="btn btn-outline-secondary btn-sm">
+                      Remove
+                    </button>
                   </div>
                 </div>
               </div>
@@ -198,14 +227,42 @@ export default function SettingsPage() {
                 <div className="input-group">
                   {editingDisplayName ? (
                     <>
-                      <input className="form-control" value={displayName} onChange={(e) => setDisplayName(e.target.value)} maxLength={MAX_DISPLAY_NAME_CHARS} />
-                      <button className="btn btn-primary" onClick={handleSaveDisplayName} disabled={savingDisplayName}>{savingDisplayName ? "Saving..." : "Save"}</button>
-                      <button className="btn btn-outline-secondary" onClick={() => { setDisplayName(user.fullName); setEditingDisplayName(false); }}>Cancel</button>
+                      <input
+                        className="form-control"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        maxLength={MAX_DISPLAY_NAME_CHARS}
+                      />
+                      <button
+                        className="btn btn-primary"
+                        onClick={handleSaveDisplayName}
+                        disabled={savingDisplayName}
+                      >
+                        {savingDisplayName ? "Saving..." : "Save"}
+                      </button>
+                      <button
+                        className="btn btn-outline-secondary"
+                        onClick={() => {
+                          setDisplayName(user.fullName);
+                          setEditingDisplayName(false);
+                        }}
+                      >
+                        Cancel
+                      </button>
                     </>
                   ) : (
                     <>
-                      <input className="form-control" value={user.fullName} readOnly />
-                      <button className="btn btn-outline-primary" onClick={() => setEditingDisplayName(true)}>Edit</button>
+                      <input
+                        className="form-control"
+                        value={user.fullName}
+                        readOnly
+                      />
+                      <button
+                        className="btn btn-outline-primary"
+                        onClick={() => setEditingDisplayName(true)}
+                      >
+                        Edit
+                      </button>
                     </>
                   )}
                 </div>
@@ -216,8 +273,22 @@ export default function SettingsPage() {
                 <label className="form-label fw-bold">Username</label>
                 <div className="input-group">
                   <span className="input-group-text">@</span>
-                  <input className="form-control" value={username} onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s/g, ''))} />
-                  <button className="btn btn-primary" onClick={handleSaveUsername} disabled={savingUsername}>{savingUsername ? "Saving..." : "Save"}</button>
+                  <input
+                    className="form-control"
+                    value={username}
+                    onChange={(e) =>
+                      setUsername(
+                        e.target.value.toLowerCase().replace(/\s/g, "")
+                      )
+                    }
+                  />
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleSaveUsername}
+                    disabled={savingUsername}
+                  >
+                    {savingUsername ? "Saving..." : "Save"}
+                  </button>
                 </div>
               </div>
             </div>
@@ -229,10 +300,19 @@ export default function SettingsPage() {
 
         {/* Save All + Logout */}
         <div className="card-footer bg-white p-4 pt-0">
-          <button className="btn btn-lg w-100 fw-semibold mb-2" style={{ backgroundColor: '#6610f2', color: 'white' }} onClick={handleSaveAllChanges} disabled={savingAll}>
+          <button
+            className="btn btn-lg w-100 fw-semibold mb-2"
+            style={{ backgroundColor: "#6610f2", color: "white" }}
+            onClick={handleSaveAllChanges}
+            disabled={savingAll}
+          >
             {savingAll ? "Saving All Changes..." : "Save All Changes"}
           </button>
-          <button className="btn btn-outline-danger w-100" onClick={handleLogout} disabled={loadingLogout}>
+          <button
+            className="btn btn-outline-danger w-100"
+            onClick={handleLogout}
+            disabled={loadingLogout}
+          >
             {loadingLogout ? "Logging out..." : "Logout"}
           </button>
         </div>
