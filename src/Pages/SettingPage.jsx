@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { logoutUser, getCurrentUser, updateProfile } from "../Service/api";
+import UpgradeButton from "../Components/UpgradeButton";
+import { Link } from "react-router-dom";
 
 const MAX_DISPLAY_NAME_CHARS = 20;
 const MAX_BIO_CHARS = 100;
@@ -12,12 +14,12 @@ export default function SettingsPage() {
 
   const [user, setUser] = useState({
     id: null,
-    fullName: "-",
-    name: " NewOne",
+    fullName: "Nothing ",
+    name: "Newone",
     email: "guest@gmail.com",
-    avatar: "/uploads/Ikram.png",
-    username: "update kol d dlta",
-    bio: "Coffee enthusiast ☕ | Tech lover 💻",
+    avatar: "/uploads/Ikram.jpeg",
+    username: "NewOne",
+    bio: "Coffee enthusiast ☕ | Tech lover ",
     status: "Available",
     ...passedUser,
   });
@@ -207,7 +209,6 @@ export default function SettingsPage() {
                   </p>
                   <div className="d-flex">
                     <Link to="/profile">
-                      {" "}
                       <button className="btn btn-primary btn-sm me-2">
                         Upload Photo
                       </button>
@@ -294,7 +295,11 @@ export default function SettingsPage() {
             </div>
           )}
 
-          {activeTab === "premium" && <div>... Premium settings ...</div>}
+          {activeTab === "premium" && (
+            <div>
+              <UpgradeButton />
+            </div>
+          )}
           {activeTab === "account" && <div>... Account settings ...</div>}
         </div>
 
